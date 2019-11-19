@@ -3,9 +3,9 @@
     <v-app-bar app>
       <!-- -->
       <div id="nav">
-        <router-link to="/">Главная</router-link> |
-        <router-link to="/tasks">Задачи</router-link> |
-        <router-link to="/directories">Справочники</router-link>
+        <v-btn class="ma-2" rounded dark color="orange accent-4" to="/">Главная</v-btn>
+        <v-btn class="ma-2" rounded dark color="orange accent-4" to="/tasks">Задачи</v-btn>
+        <v-btn class="ma-2" rounded dark color="orange accent-4" to="/directories">Справочники</v-btn>
       </div>
     </v-app-bar>
 

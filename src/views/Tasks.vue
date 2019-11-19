@@ -36,9 +36,9 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr v-for="task in tasksFiltered" :key="task.id">
-                          <td>{{ task.name }}</td>
-                          <td>{{ task.performer }}</td>
+                        <tr v-for="task in tasksFiltered" :key="task.id" @click="goTo(task)">
+                            <td>{{ task.name }}</td>
+                            <td>{{ task.performer }}</td>
                         </tr>
                       </tbody>
                     </template>
@@ -173,6 +173,17 @@ export default {
         default:
           return this.tasksGroup;
       }
+    }
+  },
+  methods: {
+    goTo(obj) {
+      this.$router.push({
+        name: 'task',
+        params: {
+          id: obj.id,
+          task: obj
+        }
+      });
     }
   }
 }
