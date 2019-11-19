@@ -16,8 +16,37 @@
 
     <v-tabs-items v-model="tab">
       <v-tab-item v-for="(groupName, i) in tasksGroupName" :key="i">
-        <v-card flat>
-          <v-card-text v-text="text"></v-card-text>
+        <v-card>
+          <v-container fluid>
+            <v-row align="center" justify="center">
+              <v-col cols="12" sm="6">
+                <v-select
+                   v-model="selectedFilter"
+                   :items="tasksFilterName"
+                   label="Фильтр задач"
+                >
+                </v-select>
+                <v-card-text>
+                  <v-simple-table>
+                    <template v-slot:default>
+                      <thead>
+                        <tr>
+                          <th class="text-left">Задача</th>
+                          <th class="text-left">Исполнитель</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="task in tasksFiltered" :key="task.id">
+                          <td>{{ task.name }}</td>
+                          <td>{{ task.performer }}</td>
+                        </tr>
+                      </tbody>
+                    </template>
+                  </v-simple-table>
+                </v-card-text>
+              </v-col>
+            </v-row>
+          </v-container>
         </v-card>
       </v-tab-item>
     </v-tabs-items>
@@ -28,10 +57,123 @@
 export default {
   name: 'tasks',
   data: () => ({
+    person: "Petr",
     tab: null,
-    text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     tasksGroupName: ["Все задачи", "Мои задачи", "Задачи от меня"],
-    tasksFilterName: ["все", "не выполнены", "закрытые", "за ненадобностью", "на паузе"]
-  })
+    tasksFilterName: ["все", "не выполнены", "закрытые", "- за ненадобностью", "- на паузе"],
+    selectedFilter: "",
+    tasks: [
+      {
+        id: 676848237,
+        owner: "Petr",
+        performer: "Ivan",
+        create: "2019-10-17T13:24:00",
+        isDone: false,
+        isCanceled: false,
+        onPause: false,
+        name: "Lorem ipsum",
+        text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt"
+      },
+      {
+        id: 454567435,
+        owner: "Petr",
+        performer: "Maria",
+        create: "2019-10-17T13:33:00",
+        isDone: true,
+        isCanceled: false,
+        onPause: false,
+        name: "Lorem pusum",
+        text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt"
+      },
+      {
+        id: 456235725,
+        owner: "Petr",
+        performer: "Maria",
+        create: "2019-10-18T15:34:00",
+        isDone: false,
+        isCanceled: true,
+        onPause: false,
+        name: "Ненужная задача",
+        text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt"
+      },
+      {
+        id: 456235799,
+        owner: "Ivan",
+        performer: "Petr",
+        create: "2019-10-17T14:27:00",
+        isDone: false,
+        isCanceled: false,
+        onPause: true,
+        name: "На паузе для Петра",
+        text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt"
+      },
+      {
+        id: 456235687,
+        owner: "Maria",
+        performer: "Ivan",
+        create: "2019-10-17T14:26:00",
+        isDone: false,
+        isCanceled: false,
+        onPause: false,
+        name: "Pusum delirium",
+        text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt"
+      }
+    ]
+  }),
+
+  computed: {
+    myTasks() {
+      return this.tasks.filter(task => task.performer === this.person);
+    },
+    fromMeTasks() {
+      return this.tasks.filter(task => task.owner === this.person);
+    },
+    tasksGroup() {
+      let result;
+      if (this.tab === 0) {
+        result = this.tasks;
+      } else if (this.tab === 1) {
+        result = this.myTasks;
+      } else {
+        result = this.fromMeTasks;
+      }
+      return result;
+    },
+    completedTasks() {
+      return this.tasksGroup.filter(task => task.isDone);
+    },
+    notCompletedTasks() {
+      return this.tasksGroup.filter(task => !task.isDone);
+    },
+    canceledTasks() {
+      return this.tasksGroup.filter(task => task.isCanceled);
+    },
+    pausedTasks() {
+      return this.tasksGroup.filter(task => task.onPause);
+    },
+    tasksFiltered() {
+      let filter = this.tasksFilterName;
+
+      switch (this.selectedFilter) {
+        case filter[0]:
+          return this.tasksGroup;
+          break;
+        case filter[1]:
+          return this.notCompletedTasks;
+          break;
+        case filter[2]:
+          return this.completedTasks;
+          break;
+        case filter[3]:
+          return this.canceledTasks;
+          break;
+        case filter[4]:
+          return this.pausedTasks;
+          break;
+        default:
+          return this.tasksGroup;
+      }
+    }
+  }
 }
 </script>
