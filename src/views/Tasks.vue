@@ -32,9 +32,10 @@
             <v-row align="center" justify="center">
               <v-col cols="12" sm="6">
                 <v-select
-                   v-model="selectedFilter"
-                   :items="tasksFilterName"
-                   label="Фильтр задач"
+                  v-model="selectedFilter"
+                  :items="tasksFilterName"
+                  :menu-props="{ 'open-on-hover': true }"
+                  label="Фильтр задач"
                 >
                 </v-select>
                 <v-card-text>
