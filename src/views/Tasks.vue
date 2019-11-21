@@ -10,8 +10,13 @@
           <v-tab
             v-for="(groupName, i) in tasksGroupName"
             :key="i"
+            @mouseover="showBadge = true"
+            @mouseout="showBadge = false"
           >
-            <v-badge color="primary">
+            <v-badge
+              color="primary"
+              v-model="showBadge"
+            >
               <span slot="badge">{{tasksGroupLength[i]}}</span>
               {{ groupName }}
             </v-badge>
@@ -65,6 +70,7 @@ export default {
   data: () => ({
     person: "Petr",
     tab: null,
+    showBadge: false,
     tasksGroupName: ["Все задачи", "Мои задачи", "Задачи от меня"],
     tasksFilterName: ["все", "не выполнены", "закрытые", "- за ненадобностью", "- на паузе"],
     selectedFilter: "",
