@@ -4,11 +4,17 @@
       <v-toolbar-title>Задачи</v-toolbar-title>
 
       <template v-slot:extension>
-        <v-tabs v-model="tab" centered>
+        <v-tabs v-model="tab" centered fixed-tabs>
           <v-tabs-slider></v-tabs-slider>
 
-          <v-tab v-for="(groupName, i) in tasksGroupName" :key="i">
-            {{ groupName }}
+          <v-tab
+            v-for="(groupName, i) in tasksGroupName"
+            :key="i"
+          >
+            <v-badge color="primary">
+              <span slot="badge">{{tasksGroupLength[i]}}</span>
+              {{ groupName }}
+            </v-badge>
           </v-tab>
         </v-tabs>
       </template>
@@ -130,6 +136,7 @@ export default {
     },
     tasksGroup() {
       let result;
+
       if (this.tab === 0) {
         result = this.tasks;
       } else if (this.tab === 1) {
@@ -137,7 +144,15 @@ export default {
       } else {
         result = this.fromMeTasks;
       }
+
       return result;
+    },
+    tasksGroupLength() {
+      return [
+          this.tasks.length,
+          this.myTasks.length,
+          this.fromMeTasks.length
+        ];
     },
     completedTasks() {
       return this.tasksGroup.filter(task => task.isDone);
