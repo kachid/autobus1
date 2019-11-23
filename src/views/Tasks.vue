@@ -68,6 +68,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: 'tasks',
   data: () => ({
@@ -75,83 +77,20 @@ export default {
     tab: null,
     showBadge: false,
     tasksGroupName: ["Все задачи", "Мои задачи", "Задачи от меня"],
-    tasksFilterName: ["все", "не выполнены", "закрытые", "- за ненадобностью", "- на паузе"],
-    selectedFilter: "",
-    tasks: [
-      {
-        id: 676848237,
-        owner: "Petr",
-        performer: "Ivan",
-        create: "2019-10-17T13:24:00",
-        isDone: false,
-        isCanceled: false,
-        onPause: false,
-        name: "Lorem ipsum",
-        text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt"
-      },
-      {
-        id: 454567435,
-        owner: "Petr",
-        performer: "Maria",
-        create: "2019-10-17T13:33:00",
-        isDone: true,
-        isCanceled: false,
-        onPause: false,
-        name: "Lorem pusum",
-        text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt"
-      },
-      {
-        id: 456235725,
-        owner: "Petr",
-        performer: "Maria",
-        create: "2019-10-18T15:34:00",
-        isDone: true,
-        isCanceled: true,
-        onPause: false,
-        name: "Ненужная задача",
-        text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt"
-      },
-      {
-        id: 456235799,
-        owner: "Ivan",
-        performer: "Petr",
-        create: "2019-10-17T14:27:00",
-        isDone: true,
-        isCanceled: false,
-        onPause: true,
-        name: "На паузе для Петра",
-        text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt"
-      },
-      {
-        id: 456235687,
-        owner: "Maria",
-        performer: "Ivan",
-        create: "2019-10-17T14:26:00",
-        isDone: false,
-        isCanceled: false,
-        onPause: false,
-        name: "Pusum delirium",
-        text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt"
-      }
-    ]
+    tasksFilterName: ["все", "не выполнены", "закрытые", "закрытые за ненадобностью", "закрытые на паузе"],
+    selectedFilter: ""
   }),
 
   computed: {
-    myTasks() {
-      return this.tasks.filter(task => task.performer === this.person);
-    },
-    fromMeTasks() {
-      return this.tasks.filter(task => task.owner === this.person);
-    },
     tasksGroup() {
       let result;
 
       if (this.tab === 0) {
         result = this.tasks;
       } else if (this.tab === 1) {
-        result = this.myTasks;
+        result = this.myTasks(this.person);
       } else {
-        result = this.fromMeTasks;
+        result = this.fromMeTasks(this.person);
       }
 
       return result;
@@ -159,8 +98,8 @@ export default {
     tasksGroupLength() {
       return [
           this.tasks.length,
-          this.myTasks.length,
-          this.fromMeTasks.length
+          this.myTasks(this.person).length,
+          this.fromMeTasks(this.person).length
         ];
     },
     completedTasks() {
@@ -197,7 +136,12 @@ export default {
         default:
           return this.tasksGroup;
       }
-    }
+    },
+    ...mapGetters({
+      tasks: "getAllTasks",
+      myTasks: "getTasksByPerformer",
+      fromMeTasks: "getTasksByOwner"
+    })
   },
   watch: {
     tab() {
