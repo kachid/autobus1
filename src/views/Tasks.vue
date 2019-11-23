@@ -34,8 +34,10 @@
                 <v-select
                   v-model="selectedFilter"
                   :items="tasksFilterName"
-                  :menu-props="{ 'open-on-hover': true }"
+                  :menu-props="{ 'open-on-hover': true, offsetY:true }"
                   label="Фильтр задач"
+                  filled
+                  hide-selected
                 >
                 </v-select>
                 <v-card-text>
@@ -195,6 +197,11 @@ export default {
         default:
           return this.tasksGroup;
       }
+    }
+  },
+  watch: {
+    tab() {
+      this.selectedFilter = "";
     }
   },
   methods: {
