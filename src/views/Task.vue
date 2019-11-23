@@ -5,14 +5,14 @@
     color="blue lighten-4"
   >
     <v-card-title>
-      {{task.name}}
+      {{task(id).name}}
     </v-card-title>
 
     <v-card-subtitle>
-      Исполнитель: {{task.performer}}
+      Исполнитель: {{task(id).performer}}
     </v-card-subtitle>
     <v-card-text class="text--primary">
-      <div>Кем поставлена: {{task.owner}}</div>
+      <div>Кем поставлена: {{task(id).owner}}</div>
 
       <div class="font-italic font-weight-light">
         {{createData}}
@@ -28,6 +28,7 @@
       >
         <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
       </v-btn>
+      <v-btn icon absolute right>text</v-btn>
     </v-card-actions>
 
     <v-expand-transition>
@@ -60,9 +61,6 @@
       ...mapGetters({
         task: "getTaskByID"
       })
-    },
-    mounted() {
-      console.log("task: ", this.task(this.id));
     }
   }
 </script>

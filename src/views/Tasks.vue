@@ -50,7 +50,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr v-for="task in tasksFiltered" :key="task.id" @click="goTo(task)">
+                        <tr v-for="task in tasksFiltered" :key="task.id" class="pointer" @click="goTo(task.id)">
                             <td>{{ task.name }}</td>
                             <td>{{ task.performer }}</td>
                         </tr>
@@ -149,15 +149,15 @@ export default {
     }
   },
   methods: {
-    goTo(obj) {
-      this.$router.push({
-        name: 'task',
-        params: {
-          id: obj.id,
-          task: obj
-        }
-      });
+    goTo(id) {
+      this.$router.push({ path: `/tasks/${id}` });
     }
   }
 }
 </script>
+
+<style scoped>
+.pointer {
+  cursor: pointer;
+}
+</style>
