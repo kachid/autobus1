@@ -35,7 +35,7 @@
         <v-divider></v-divider>
 
         <v-card-text>
-          {{task.text}}
+          {{task(id).text}}
         </v-card-text>
       </div>
     </v-expand-transition>
@@ -43,23 +43,26 @@
 </template>
 
 <script>
+  import { mapGetters } from "vuex";
+
   export default {
     name: "Task",
-    props: {
-      id: {
-        type: Number
-      },
-      task: {
-        type: Object
-      }
-    },
     data: () => ({
       show: false,
     }),
     computed: {
       createData() {
-        return this.task.create.split("T").join("  ");
-      }
+        return this.task(this.id).create.split("T").join("  ");
+      },
+      id() {
+        return Number(this.$route.params.id);
+      },
+      ...mapGetters({
+        task: "getTaskByID"
+      })
+    },
+    mounted() {
+      console.log("task: ", this.task(this.id));
     }
   }
 </script>

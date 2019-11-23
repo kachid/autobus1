@@ -70,6 +70,9 @@ export default new Vuex.Store({
     },
     getTasksByOwner: state => owner => {
       return state.tasks.filter(task => task.owner === owner);
+    },
+    getTaskByID: state => id => {
+      return state.tasks.find(task => task.id === id);
     }
   },
   mutations: {
