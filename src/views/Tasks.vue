@@ -34,7 +34,7 @@
                 <v-select
                   v-model="selectedFilter"
                   :items="tasksFilterName"
-                  :menu-props="{ 'open-on-hover': true, 'open-delay': 500, offsetY:true }"
+                  :menu-props="{ 'open-on-hover': true, 'open-delay': 300, offsetY:true }"
                   label="Фильтр задач"
                   filled
                   hide-selected
