@@ -23,8 +23,11 @@
       </div>
     </v-card-text>
     <v-card-actions>
-      <div class="overline">
-        Показать описание
+      <div class="overline" v-if="!show">
+        Показать описание задачи
+      </div>
+      <div class="overline" v-else>
+        Скрыть описание задачи
       </div>
       <v-btn
         icon
