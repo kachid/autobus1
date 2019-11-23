@@ -6,6 +6,10 @@
   >
     <v-card-title>
       {{task(id).name}}
+
+      <v-btn icon absolute right to="/tasks">
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
     </v-card-title>
 
     <v-card-subtitle>
@@ -28,7 +32,6 @@
       >
         <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
       </v-btn>
-      <v-btn icon absolute right>text</v-btn>
     </v-card-actions>
 
     <v-expand-transition>
