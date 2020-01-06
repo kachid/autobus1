@@ -2,47 +2,46 @@
   <v-card
     class="mx-auto"
     max-width="600"
-    color="blue lighten-4"
   >
     <v-card-title>
-      {{task(id).name}}
+      {{ task.name }}
 
-      <v-btn icon absolute right to="/tasks">
+      <v-btn
+        :to="{ name: 'tasks' }"
+        icon
+        absolute
+        right
+      >
         <v-icon>mdi-close</v-icon>
       </v-btn>
     </v-card-title>
 
     <v-card-subtitle>
-      Исполнитель: {{task(id).performer}}
+      Исполнитель: {{ userById(task.performerId).name }}
     </v-card-subtitle>
     <v-card-text class="text--primary">
-      <div>Кем поставлена: {{task(id).owner}}</div>
+      <div>Кем поставлена: {{ userById(task.ownerId).name }}</div>
 
-      <div class="font-italic font-weight-light">
-        {{createData}}
+      <div class="font-italic font-weight-light mb-4">
+        {{ task.createdAt | date }}
       </div>
-    </v-card-text>
-    <v-card-actions>
-      <div class="overline" v-if="!show">
-        Показать описание задачи
-      </div>
-      <div class="overline" v-else>
-        Скрыть описание задачи
-      </div>
-      <v-btn
-        icon
-        @click="show = !show"
-      >
-        <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+
+      <v-btn text @click="show = !show">
+        <div class="overline">
+          Описание задачи
+        </div>
+        <v-icon>
+          {{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
+        </v-icon>
       </v-btn>
-    </v-card-actions>
+    </v-card-text>
 
     <v-expand-transition>
       <div v-show="show">
-        <v-divider></v-divider>
+        <v-divider />
 
         <v-card-text>
-          {{task(id).text}}
+          {{ task.text }}
         </v-card-text>
       </div>
     </v-expand-transition>
@@ -50,23 +49,48 @@
 </template>
 
 <script>
-  import { mapGetters } from "vuex";
+import { mapState } from "vuex";
 
-  export default {
-    name: "Task",
-    data: () => ({
-      show: false,
-    }),
-    computed: {
-      createData() {
-        return this.task(this.id).create.split("T").join("  ");
-      },
-      id() {
-        return Number(this.$route.params.id);
-      },
-      ...mapGetters({
-        task: "getTaskByID"
-      })
+import { memoize } from '@/utils';
+
+export default {
+  name: "Task",
+  filters: {
+    date(timestamp) {
+      const date = new Date(timestamp);
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+
+      return `${day}.${month}.${year} ${hours}:${minutes}`;
     }
+  },
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
+  data() {
+    return {
+      show: false
+    }
+  },
+  computed: {
+    ...mapState({
+      users: state => state.users,
+      tasks: state => state.tasks
+    }),
+    task() {
+      return this.tasks.find(({ id }) => id === this.id)
+    }
+  },
+  methods: {
+    userById: memoize(function(userId) {
+      return this.users.find(({ id }) => id === userId);
+    })
   }
+}
 </script>

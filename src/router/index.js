@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+
+const Home = () => import('@/views/Home')
+const Tasks = () => import ('@/views/Tasks')
+const Task = () => import ('@/views/Task')
+const Directories = () => import ('@/views/Directories')
 
 Vue.use(VueRouter)
 
@@ -13,17 +17,18 @@ const routes = [
   {
     path: '/tasks',
     name: 'tasks',
-    component: () => import('../views/Tasks.vue')
+    component: Tasks
   },
   {
-    path: '/tasks/:id',
+    path: '/task/:id',
     name: 'task',
-    component: () => import('../views/Task.vue')
+    props: true,
+    component: Task
   },
   {
     path: '/directories',
     name: 'directories',
-    component: () => import('../views/Directories.vue')
+    component: Directories
   }
 ]
 
